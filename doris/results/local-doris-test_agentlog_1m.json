@@ -1,0 +1,69 @@
+{
+  "system": "Apache Doris",
+  "version": "5.7.99",
+  "os": "Ubuntu-local",
+  "date": "2026-09-01",
+  "machine": "local-doris-test",
+  "retains_structure": "yes",
+  "tags": [],
+  "dataset_size": 1000000,
+  "num_loaded_documents": 998799,
+  "total_size": 628091781,
+  "result": [
+    [0.153, 0.058, 0.059],
+    [0.171, 0.09, 0.08],
+    [0.03, 0.028, 0.032],
+    [0.099, 0.06, 0.056],
+    [1.207, 0.949, 0.947],
+    [0.102, 0.08, 0.07],
+    [1.113, 1.024, 1.03],
+    [0.29, 0.082, 0.054],
+    [0.069, 0.066, 0.073],
+    [0.08, 0.076, 0.073],
+    [0.039, 0.037, 0.04],
+    [0.09, 0.085, 0.084],
+    [0.075, 0.04, 0.039],
+    [0.483, 0.27, 0.266],
+    [0.045, 0.038, 0.042],
+    [0.042, 0.044, 0.044],
+    [0.032, 0.03, 0.031],
+    [0.083, 0.077, 0.072],
+    [0.09, 0.085, 0.08],
+    [0.103, 0.097, 0.097]
+  ],
+  "data_size": 628091781,
+  "load_time": 46.029,
+  "artifact_manifest": {
+    "embedded_sidecars": [
+      {
+        "name": "local-doris-test_agentlog_1m.count",
+        "field": "num_loaded_documents",
+        "value": 998799
+      },
+      {
+        "name": "local-doris-test_agentlog_1m.total_size",
+        "field": "total_size",
+        "value": 628091781
+      },
+      {
+        "name": "local-doris-test_agentlog_1m.results_runtime",
+        "field": "result",
+        "rows": 20,
+        "tries": 3
+      },
+      {
+        "name": "local-doris-test_agentlog_1m.data_size",
+        "field": "data_size",
+        "value": 628091781
+      },
+      {
+        "name": "local-doris-test_agentlog_1m.load_time",
+        "field": "load_time",
+        "value": 46.029
+      }
+    ],
+    "query_results": {
+      "path": "_query_results/_local-doris-test_agentlog_1m.query_results"
+    }
+  }
+}

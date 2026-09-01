@@ -17,3 +17,9 @@ Typical run:
 bash ../download.sh --size 1m
 bash benchmark.sh --size 1m
 ```
+
+`DATA_DIR` or `DATA_GLOB` selects the source files and `RUNTIME_DIR` selects
+the disposable runtime. Set `OS_BIN` to an existing OpenSearch executable;
+`OS_STORAGE_PATH`, `OS_CONF_DIR`, and `OS_LOG_PATH` override its runtime paths.
+If `OS_BIN` is not set or does not exist, the fallback installer uses its
+versioned directory below `opensearch/.local/`.

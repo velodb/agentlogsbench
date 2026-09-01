@@ -19,6 +19,7 @@ ENGINE_DEFAULT_TAGS = {
     "clickhouse": ["sql", "column-oriented", "full-text", "semi-structured"],
     "doris": ["sql", "column-oriented", "full-text", "semi-structured"],
     "elastic": ["search", "document", "full-text", "semi-structured"],
+    "matrixone": ["sql", "semi-structured"],
     "opensearch": ["search", "document", "full-text", "semi-structured"],
     "postgres": ["sql", "row-oriented", "full-text", "semi-structured"],
 }

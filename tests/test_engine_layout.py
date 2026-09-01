@@ -55,6 +55,21 @@ class EngineLayoutTest(unittest.TestCase):
         self.assertIn("generate-results.sh", script)
         self.assertIn("Dashboard data refreshed", script)
 
+    def test_benchmark_lanes_accept_environment_data_and_runtime_paths(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        root_script = (root / "benchmark.sh").read_text(encoding="utf-8")
+
+        self.assertIn('DATA_DIR="${DATA_DIR:-}"', root_script)
+        self.assertIn('DATA_GLOB="${DATA_GLOB:-}"', root_script)
+        self.assertIn("--data-glob", root_script)
+        self.assertNotIn('RUNTIME_DIR=""', root_script)
+
+        for engine in RUNNABLE_ENGINES:
+            benchmark_script = (root / engine / "benchmark.sh").read_text(encoding="utf-8")
+            self.assertIn('DATA_DIR="${DATA_DIR:-}"', benchmark_script, msg=engine)
+            self.assertIn('DATA_GLOB="${DATA_GLOB:-}"', benchmark_script, msg=engine)
+            self.assertIn('RUNTIME_DIR="${RUNTIME_DIR:-', benchmark_script, msg=engine)
+
     def test_clickhouse_duckdb_and_postgres_manifests_reference_benchmark_surface(self) -> None:
         root = Path(__file__).resolve().parents[1]
         clickhouse_manifest = (root / "common" / "adapters" / "clickhouse" / "manifest.json").read_text(encoding="utf-8")
@@ -181,6 +196,11 @@ class EngineLayoutTest(unittest.TestCase):
         self.assertIn('if wal_path.exists() and wal_path.stat().st_size > 0:', benchmark_script)
         self.assertIn('con.execute("CHECKPOINT")', benchmark_script)
         self.assertNotIn('duckdb.connect(str(db_path), read_only=True)', benchmark_script)
+        self.assertIn('CALLER_DIR="$(pwd)"', benchmark_script)
+        self.assertIn('DATA_DIR="${CALLER_DIR}/${DATA_DIR}"', benchmark_script)
+        self.assertIn('DATA_GLOB="${CALLER_DIR}/${DATA_GLOB}"', benchmark_script)
+        self.assertIn('CALLER_DIR="$(pwd)"', import_script)
+        self.assertIn('DATA_GLOB="${CALLER_DIR}/${DATA_GLOB}"', import_script)
 
     def test_json_search_import_uses_auto_generated_ids_for_serial_bulk_load(self) -> None:
         root = Path(__file__).resolve().parents[1]

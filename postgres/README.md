@@ -35,3 +35,7 @@ Typical run:
 bash ../download.sh --size 1m
 bash benchmark.sh --size 1m
 ```
+
+`DATA_DIR` or `DATA_GLOB` selects the source files, `RUNTIME_DIR` selects the
+disposable runtime, and `PG_HOME` or `PG_BIN_DIR` selects the existing
+PostgreSQL installation. `PGDATA` can override the cluster data directory.

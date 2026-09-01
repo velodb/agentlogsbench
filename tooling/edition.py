@@ -17,7 +17,7 @@ from agentlogsbench.tooling.paths import (
 )
 from agentlogsbench.tooling.query_loader import load_query_sections
 
-REQUIRED_ENGINES = {"clickhouse", "doris", "duckdb", "elastic", "opensearch", "postgres"}
+REQUIRED_ENGINES = {"clickhouse", "doris", "duckdb", "elastic", "matrixone", "opensearch", "postgres"}
 REQUIRED_QUERY_IDS = {f"Q{i:02d}" for i in range(1, 21)}
 EXPECTED_QUERY_COUNT = 20
 EXPECTED_PROMOTED_COLUMNS = [

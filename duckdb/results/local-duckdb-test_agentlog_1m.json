@@ -1,0 +1,75 @@
+{
+  "system": "DuckDB",
+  "version": "1.5.5",
+  "os": "Linux",
+  "date": "2026-09-01",
+  "machine": "local-duckdb-test",
+  "retains_structure": "yes",
+  "tags": [],
+  "dataset_size": 1000000,
+  "num_loaded_documents": 998799,
+  "total_size": 988295168,
+  "result": [
+    [0.012, 0.006, 0.007],
+    [0.015, 0.014, 0.015],
+    [0.005, 0.004, 0.004],
+    [0.012, 0.01, 0.012],
+    [2.719, 2.536, 2.607],
+    [0.011, 0.013, 0.014],
+    [22.29, 22.411, 22.571],
+    [0.422, 0.368, 0.363],
+    [0.006, 0.006, 0.006],
+    [41.577, 41.59, 42.492],
+    [0.283, 0.284, 0.285],
+    [63.81, 64.933, 64.213],
+    [0.488, 0.49, 0.478],
+    [0.263, 0.266, 0.266],
+    [0.47, 0.464, 0.462],
+    [23.539, 23.303, 23.348],
+    [21.016, 20.937, 20.89],
+    [21.242, 21.212, 21.246],
+    [45.141, 45.326, 45.312],
+    [43.796, 44.043, 43.949]
+  ],
+  "data_size": 988295168,
+  "index_size": 0,
+  "load_time": 125.093,
+  "artifact_manifest": {
+    "embedded_sidecars": [
+      {
+        "name": "local-duckdb-test_agentlog_1m.count",
+        "field": "num_loaded_documents",
+        "value": 998799
+      },
+      {
+        "name": "local-duckdb-test_agentlog_1m.total_size",
+        "field": "total_size",
+        "value": 988295168
+      },
+      {
+        "name": "local-duckdb-test_agentlog_1m.results_runtime",
+        "field": "result",
+        "rows": 20,
+        "tries": 3
+      },
+      {
+        "name": "local-duckdb-test_agentlog_1m.data_size",
+        "field": "data_size",
+        "value": 988295168
+      },
+      {
+        "name": "local-duckdb-test_agentlog_1m.index_size",
+        "field": "index_size",
+        "value": 0
+      },
+      {
+        "name": "local-duckdb-test_agentlog_1m.load_time",
+        "field": "load_time",
+        "value": 125.093
+      }
+    ],
+    "query_results": {
+      "path": "_query_results/_local-duckdb-test_agentlog_1m.query_results"
+    }
+  }
+}

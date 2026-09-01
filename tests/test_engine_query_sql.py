@@ -16,6 +16,7 @@ class EngineQuerySqlTest(unittest.TestCase):
             root / "clickhouse" / "queries.sql",
             root / "postgres" / "queries.sql",
             root / "doris" / "queries.sql",
+            root / "matrixone" / "queries.sql",
         )
         forbidden_fragments = (
             ":tenant",

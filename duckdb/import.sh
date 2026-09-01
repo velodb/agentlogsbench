@@ -3,12 +3,17 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+CALLER_DIR="$(pwd)"
 cd "${ROOT_DIR}"
 
 DB_PATH="${DB_PATH:-${SCRIPT_DIR}/runtime/agentlogsbench.duckdb}"
 DUCKDB_TABLE="${DUCKDB_TABLE:-agent_observations}"
 DATA_GLOB="${DATA_GLOB:-${ROOT_DIR}/agentlogsbench/common/generated/small/agent_observations_s.ndjson}"
 CREATE_SQL="${CREATE_SQL:-${SCRIPT_DIR}/create.sql}"
+
+if [[ "${DATA_GLOB}" != /* ]]; then
+    DATA_GLOB="${CALLER_DIR}/${DATA_GLOB}"
+fi
 
 shopt -s nullglob
 files=( ${DATA_GLOB} )

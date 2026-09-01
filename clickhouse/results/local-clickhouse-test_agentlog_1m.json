@@ -1,0 +1,75 @@
+{
+  "system": "ClickHouse",
+  "version": "ClickHouse local version 26.9.1.229 (official build).",
+  "os": "Ubuntu-local",
+  "date": "2026-09-01",
+  "machine": "local-clickhouse-test",
+  "retains_structure": "yes",
+  "tags": [],
+  "dataset_size": 1000000,
+  "num_loaded_documents": 998799,
+  "total_size": 605658965,
+  "result": [
+    [0.336, 0.354, 0.337],
+    [0.349, 0.327, 0.319],
+    [0.209, 0.209, 0.321],
+    [0.34, 0.351, 0.311],
+    [0.903, 0.902, 0.916],
+    [0.371, 0.364, 0.36],
+    [0.641, 0.669, 0.645],
+    [0.538, 0.542, 0.532],
+    [0.347, 0.345, 0.332],
+    [0.358, 0.368, 0.36],
+    [0.528, 0.504, 0.492],
+    [0.373, 0.366, 0.376],
+    [0.63, 0.62, 0.616],
+    [0.505, 0.515, 0.499],
+    [0.533, 0.514, 0.568],
+    [0.372, 0.354, 0.362],
+    [0.383, 0.354, 0.366],
+    [0.359, 0.361, 0.365],
+    [1.451, 1.454, 1.435],
+    [0.381, 0.377, 0.362]
+  ],
+  "data_size": 518588230,
+  "index_size": 3167908,
+  "load_time": 19.13,
+  "artifact_manifest": {
+    "embedded_sidecars": [
+      {
+        "name": "local-clickhouse-test_agentlog_1m.count",
+        "field": "num_loaded_documents",
+        "value": 998799
+      },
+      {
+        "name": "local-clickhouse-test_agentlog_1m.total_size",
+        "field": "total_size",
+        "value": 605658965
+      },
+      {
+        "name": "local-clickhouse-test_agentlog_1m.results_runtime",
+        "field": "result",
+        "rows": 20,
+        "tries": 3
+      },
+      {
+        "name": "local-clickhouse-test_agentlog_1m.data_size",
+        "field": "data_size",
+        "value": 518588230
+      },
+      {
+        "name": "local-clickhouse-test_agentlog_1m.index_size",
+        "field": "index_size",
+        "value": 3167908
+      },
+      {
+        "name": "local-clickhouse-test_agentlog_1m.load_time",
+        "field": "load_time",
+        "value": 19.13
+      }
+    ],
+    "query_results": {
+      "path": "_query_results/_local-clickhouse-test_agentlog_1m.query_results"
+    }
+  }
+}

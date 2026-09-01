@@ -3,12 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+CALLER_DIR="$(pwd)"
 source "${ROOT_DIR}/agentlogsbench/common/benchmark_lib.sh"
 cd "${ROOT_DIR}"
 
 SIZE=""
-DATA_DIR=""
-DATA_GLOB=""
+DATA_DIR="${DATA_DIR:-}"
+DATA_GLOB="${DATA_GLOB:-}"
 OUTPUT_PREFIX="${OUTPUT_PREFIX:-$(default_output_prefix)}"
 MACHINE_LABEL="${BENCHMARK_MACHINE:-$(current_machine_label)}"
 OS_LABEL="${BENCHMARK_OS:-$(current_os_label)}"
@@ -34,11 +35,19 @@ while [ "$#" -gt 0 ]; do
 done
 
 SIZE="$(resolve_dataset_size "${SIZE}")"
+if [ -n "${DATA_DIR}" ]; then
+    if [[ "${DATA_DIR}" != /* ]]; then
+        DATA_DIR="${CALLER_DIR}/${DATA_DIR}"
+    fi
+    DATA_DIR="$(cd "${DATA_DIR}" && pwd)"
+fi
 if [ -z "${DATA_GLOB}" ]; then
     if [ -z "${DATA_DIR}" ]; then
         DATA_DIR="$(default_download_dir "${ROOT_DIR}/agentlogsbench" "${SIZE}")"
     fi
     DATA_GLOB="$(dataset_download_files "${DATA_DIR}" "${SIZE}")"
+elif [[ "${DATA_GLOB}" != /* ]]; then
+    DATA_GLOB="${CALLER_DIR}/${DATA_GLOB}"
 fi
 
 RESULT_DIR="${RESULT_DIR:-${SCRIPT_DIR}/results}"

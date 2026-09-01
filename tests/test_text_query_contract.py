@@ -32,6 +32,7 @@ class TextQueryContractTest(unittest.TestCase):
             "clickhouse/queries.sql": load_query_sections(self.root / "clickhouse" / "queries.sql"),
             "doris/queries.sql": load_query_sections(self.root / "doris" / "queries.sql"),
             "postgres/queries.sql": load_query_sections(self.root / "postgres" / "queries.sql"),
+            "matrixone/queries.sql": load_query_sections(self.root / "matrixone" / "queries.sql"),
         }
 
         for surface_name, sections in sections_by_surface.items():

@@ -1,0 +1,82 @@
+{
+  "engine": "matrixone",
+  "manifest_version": 1,
+  "edition": "2026.04-observability-v1",
+  "logical_surface": "single-primary-surface",
+  "table_name": "agent_observations",
+  "dynamic_representation": "json_as_payload",
+  "promoted_columns_confirmed": [
+    "event_time",
+    "biz_date",
+    "trace_id",
+    "session_id",
+    "observation_id",
+    "parent_observation_id",
+    "seq_no",
+    "type",
+    "status",
+    "tenant",
+    "app",
+    "environment",
+    "task_category",
+    "trace_archetype",
+    "model",
+    "tool_name",
+    "input",
+    "output",
+    "input_tokens",
+    "output_tokens",
+    "total_cost",
+    "latency_ms"
+  ],
+  "declared_schema": {
+    "dynamic_column": "payload",
+    "supports_trace_replay_on_primary_surface": true,
+    "supports_chain_expansion_on_primary_surface": true,
+    "supports_attr_filtering_on_primary_surface": true
+  },
+  "declared_indexes": [
+    {
+      "name": "trace_seq_observation_primary_key",
+      "kind": "native_primary_key",
+      "paths": [
+        "trace_id",
+        "seq_no",
+        "observation_id"
+      ],
+      "enabled_by_default": true,
+      "notes": "The primary key preserves one observation per trace sequence and is used for deterministic trace replay joins. No workload-specific secondary index is declared."
+    }
+  ],
+  "query_adapter_strategy": "mysql_sql_over_promoted_columns_plus_json_operators",
+  "query_map_source": "agentlogsbench/common/adapters/matrixone/query-map.json",
+  "primary_surface_proof": {
+    "scored_query_surfaces": [
+      "agent_observations"
+    ],
+    "secondary_scored_tables": [],
+    "evidence_note": "All scored queries execute natively against agent_observations through agentlogsbench/matrixone/benchmark.sh and emit ClickBench-style result files under matrixone/results/."
+  },
+  "main_track_supported_query_ids": [
+    "Q01",
+    "Q02",
+    "Q03",
+    "Q04",
+    "Q05",
+    "Q06",
+    "Q07",
+    "Q08",
+    "Q09",
+    "Q10",
+    "Q11",
+    "Q12",
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16",
+    "Q17",
+    "Q18",
+    "Q19",
+    "Q20"
+  ]
+}

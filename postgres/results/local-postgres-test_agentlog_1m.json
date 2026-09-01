@@ -1,0 +1,75 @@
+{
+  "system": "PostgreSQL",
+  "version": "17.0",
+  "os": "Ubuntu-local",
+  "date": "2026-09-01",
+  "machine": "local-postgres-test",
+  "retains_structure": "yes",
+  "tags": [],
+  "dataset_size": 1000000,
+  "num_loaded_documents": 998799,
+  "total_size": 3979649024,
+  "result": [
+    [0.117, 0.09, 0.088],
+    [0.645, 0.657, 0.648],
+    [0.088, 0.063, 0.066],
+    [0.063, 0.065, 0.065],
+    [0.214, 0.213, 0.219],
+    [0.224, 0.226, 0.228],
+    [4.07, 3.903, 3.896],
+    [14.303, 14.357, 14.418],
+    [0.183, 0.184, 0.184],
+    [1.398, 1.354, 1.382],
+    [2.593, 2.61, 2.596],
+    [6.161, 6.167, 6.165],
+    [22.731, 22.623, 22.644],
+    [0.498, 0.513, 0.507],
+    [21.603, 21.616, 21.607],
+    [0.501, 0.502, 0.496],
+    [0.47, 0.468, 0.461],
+    [2.975, 2.966, 2.992],
+    [69.605, 69.968, 70.016],
+    [5.872, 5.838, 5.859]
+  ],
+  "data_size": 3125870592,
+  "index_size": 853778432,
+  "load_time": 455.904,
+  "artifact_manifest": {
+    "embedded_sidecars": [
+      {
+        "name": "local-postgres-test_agentlog_1m.count",
+        "field": "num_loaded_documents",
+        "value": 998799
+      },
+      {
+        "name": "local-postgres-test_agentlog_1m.total_size",
+        "field": "total_size",
+        "value": 3979649024
+      },
+      {
+        "name": "local-postgres-test_agentlog_1m.results_runtime",
+        "field": "result",
+        "rows": 20,
+        "tries": 3
+      },
+      {
+        "name": "local-postgres-test_agentlog_1m.data_size",
+        "field": "data_size",
+        "value": 3125870592
+      },
+      {
+        "name": "local-postgres-test_agentlog_1m.index_size",
+        "field": "index_size",
+        "value": 853778432
+      },
+      {
+        "name": "local-postgres-test_agentlog_1m.load_time",
+        "field": "load_time",
+        "value": 455.904
+      }
+    ],
+    "query_results": {
+      "path": "_query_results/_local-postgres-test_agentlog_1m.query_results"
+    }
+  }
+}

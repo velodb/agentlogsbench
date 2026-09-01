@@ -1,0 +1,26 @@
+{
+  "engine": "matrixone",
+  "adapter_version": 1,
+  "queries": [
+    {"query_id": "Q01", "adapter_mode": "sql", "information_access_pattern": "filtered_observation_list"},
+    {"query_id": "Q02", "adapter_mode": "sql", "information_access_pattern": "trace_level_rollup"},
+    {"query_id": "Q03", "adapter_mode": "sql", "information_access_pattern": "trace_replay"},
+    {"query_id": "Q04", "adapter_mode": "sql", "information_access_pattern": "parent_child_chain_expansion"},
+    {"query_id": "Q05", "adapter_mode": "sql", "information_access_pattern": "tool_failure_text_triage"},
+    {"query_id": "Q06", "adapter_mode": "sql", "information_access_pattern": "model_type_cost_latency_rollup"},
+    {"query_id": "Q07", "adapter_mode": "sql", "information_access_pattern": "dynamic_field_multi_filter"},
+    {"query_id": "Q08", "adapter_mode": "sql", "information_access_pattern": "term_based_text_retrieval"},
+    {"query_id": "Q09", "adapter_mode": "sql", "information_access_pattern": "tool_usage_distribution"},
+    {"query_id": "Q10", "adapter_mode": "sql", "information_access_pattern": "provider_nested_diagnostics"},
+    {"query_id": "Q11", "adapter_mode": "sql", "information_access_pattern": "trace_outlier_rollup"},
+    {"query_id": "Q12", "adapter_mode": "sql", "information_access_pattern": "dynamic_field_facet_rollup"},
+    {"query_id": "Q13", "adapter_mode": "sql", "information_access_pattern": "incident_phrase_aggregate"},
+    {"query_id": "Q14", "adapter_mode": "sql", "information_access_pattern": "like_keyword_incident_lookup"},
+    {"query_id": "Q15", "adapter_mode": "sql", "information_access_pattern": "operational_phrase_retrieval"},
+    {"query_id": "Q16", "adapter_mode": "sql", "information_access_pattern": "low_cardinality_attr_filter"},
+    {"query_id": "Q17", "adapter_mode": "sql", "information_access_pattern": "high_cardinality_request_key_filter"},
+    {"query_id": "Q18", "adapter_mode": "sql", "information_access_pattern": "prompt_template_rollup"},
+    {"query_id": "Q19", "adapter_mode": "sql", "information_access_pattern": "incident_channel_release_rollup"},
+    {"query_id": "Q20", "adapter_mode": "sql", "information_access_pattern": "workflow_policy_rollup"}
+  ]
+}

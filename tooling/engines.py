@@ -4,12 +4,13 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
 
 
-RUNNABLE_ENGINES = ("clickhouse", "doris", "duckdb", "elastic", "opensearch", "postgres")
+RUNNABLE_ENGINES = ("clickhouse", "doris", "duckdb", "elastic", "matrixone", "opensearch", "postgres")
 ENGINE_SURFACE_FILES: Dict[str, Tuple[str, ...]] = {
     "clickhouse": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.sql", "queries.sql", "README.md"),
     "doris": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.sql", "queries.sql", "README.md"),
     "duckdb": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.sql", "queries.sql", "README.md"),
     "elastic": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.json", "queries.json", "README.md"),
+    "matrixone": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.sql", "queries.sql", "README.md"),
     "opensearch": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.json", "queries.json", "README.md"),
     "postgres": ("benchmark.sh", "run_queries.sh", "start.sh", "stop.sh", "create.sql", "queries.sql", "README.md"),
 }

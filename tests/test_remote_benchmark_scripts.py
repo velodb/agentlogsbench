@@ -34,7 +34,7 @@ class DownloadAndRootBenchmarkScriptsTest(unittest.TestCase):
         self.assertIn("run-engine", content)
         self.assertIn("dataset_download_files", content)
         self.assertIn("--input-files", content)
-        self.assertIn('ENGINES="clickhouse,doris,elastic,opensearch,postgres,duckdb"', content)
+        self.assertIn('ENGINES="clickhouse,doris,elastic,matrixone,opensearch,postgres,duckdb"', content)
         self.assertIn('Engine postgres: skipped for run-all size=100m', content)
         self.assertNotIn('bash "${SCRIPT_DIR}/download.sh"', content)
         self.assertNotIn("common/results/", content)

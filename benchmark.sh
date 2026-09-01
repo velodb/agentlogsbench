@@ -11,9 +11,9 @@ Usage:
 
 Commands:
   prepare-dataset --size SIZE      Write lightweight manifest metadata for a downloaded size
-  run-engine --engine NAME --size SIZE [--no-cleanup]
+  run-engine --engine NAME --size SIZE [--data-dir DIR|--data-glob GLOB] [--no-cleanup]
                                    Run one engine for 1m/10m/100m downloaded data
-  run-all --size SIZE [--no-cleanup]
+  run-all --size SIZE [--data-dir DIR|--data-glob GLOB] [--no-cleanup]
                                    Run multiple engines for one downloaded size
   render-dashboard [--output FILE] Regenerate data.generated.js for index.html
   validate                         Validate edition config, query suite, and adapter manifests
@@ -22,6 +22,17 @@ Commands:
   summarize --results-dir DIR --output-dir DIR
                                    Summarize legacy result JSON files
 EOF
+}
+
+require_data_glob() {
+    local data_glob="$1"
+
+    if [ -e "${data_glob}" ] || compgen -G "${data_glob}" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    echo "No input files matched DATA_GLOB=${data_glob}" >&2
+    exit 1
 }
 
 require_download_dir() {
@@ -75,20 +86,25 @@ run_engine_command() {
     local engine="$1"
     local size="$2"
     local data_dir="$3"
-    local output_prefix="$4"
-    local machine_label="$5"
-    local os_label="$6"
-    local run_date="$7"
-    local keep_runtime="$8"
+    local data_glob="$4"
+    local output_prefix="$5"
+    local machine_label="$6"
+    local os_label="$7"
+    local run_date="$8"
+    local keep_runtime="$9"
 
     local args=(
         --size "${size}"
-        --data-dir "${data_dir}"
         --output-prefix "${output_prefix}"
         --machine "${machine_label}"
         --os "${os_label}"
         --run-date "${run_date}"
     )
+    if [ -n "${data_glob}" ]; then
+        args+=(--data-glob "${data_glob}")
+    else
+        args+=(--data-dir "${data_dir}")
+    fi
     if [ "${keep_runtime}" -eq 1 ]; then
         args+=(--keep-runtime)
     fi
@@ -112,7 +128,7 @@ shift
 case "${COMMAND}" in
     prepare-dataset)
         SIZE=""
-        DATA_DIR=""
+        DATA_DIR="${DATA_DIR:-}"
         DATASET_VERSION=""
         while [ "$#" -gt 0 ]; do
             case "$1" in
@@ -162,8 +178,9 @@ case "${COMMAND}" in
     run-engine|run-all)
         SIZE=""
         ENGINE=""
-        ENGINES="clickhouse,doris,elastic,opensearch,postgres,duckdb"
-        DATA_DIR=""
+        ENGINES="clickhouse,doris,elastic,matrixone,opensearch,postgres,duckdb"
+        DATA_DIR="${DATA_DIR:-}"
+        DATA_GLOB="${DATA_GLOB:-}"
         OUTPUT_PREFIX="$(default_output_prefix)"
         MACHINE_LABEL="$(current_machine_label)"
         OS_LABEL="$(current_os_label)"
@@ -176,6 +193,7 @@ case "${COMMAND}" in
                 --engine) ENGINE="$2"; shift ;;
                 --engines) ENGINES="$2"; shift ;;
                 --data-dir) DATA_DIR="$2"; shift ;;
+                --data-glob) DATA_GLOB="$2"; shift ;;
                 --output-prefix) OUTPUT_PREFIX="$2"; shift ;;
                 --machine) MACHINE_LABEL="$2"; shift ;;
                 --os) OS_LABEL="$2"; shift ;;
@@ -187,12 +205,16 @@ case "${COMMAND}" in
         done
 
         SIZE="$(resolve_dataset_size "${SIZE}")"
-        if [ -z "${DATA_DIR}" ]; then
+        if [ -z "${DATA_GLOB}" ] && [ -z "${DATA_DIR}" ]; then
             DATA_DIR="$(default_download_dir "${SCRIPT_DIR}" "${SIZE}")"
         fi
-        require_download_dir "${DATA_DIR}" "${SIZE}"
+        if [ -n "${DATA_GLOB}" ]; then
+            require_data_glob "${DATA_GLOB}"
+        else
+            require_download_dir "${DATA_DIR}" "${SIZE}"
+        fi
         DATASET_FILES="$(dataset_file_count "${SIZE}")"
-        benchmark_log "benchmark" "Validated dataset size=${SIZE} data_dir=${DATA_DIR} files=${DATASET_FILES}"
+        benchmark_log "benchmark" "Validated dataset size=${SIZE} data_dir=${DATA_DIR:-<none>} data_glob=${DATA_GLOB:-<none>} files=${DATASET_FILES}"
 
         if [ "${COMMAND}" = "run-engine" ]; then
             if [ -z "${ENGINE}" ]; then
@@ -200,7 +222,7 @@ case "${COMMAND}" in
                 exit 1
             fi
             benchmark_log "benchmark" "Engine 1/1 ${ENGINE}: start"
-            if run_engine_command "${ENGINE}" "${SIZE}" "${DATA_DIR}" "${OUTPUT_PREFIX}" "${MACHINE_LABEL}" "${OS_LABEL}" "${RUN_DATE}" "${KEEP_RUNTIME}"; then
+            if run_engine_command "${ENGINE}" "${SIZE}" "${DATA_DIR}" "${DATA_GLOB}" "${OUTPUT_PREFIX}" "${MACHINE_LABEL}" "${OS_LABEL}" "${RUN_DATE}" "${KEEP_RUNTIME}"; then
                 benchmark_log "benchmark" "Engine 1/1 ${ENGINE}: completed"
                 render_dashboard_command "${SCRIPT_DIR}/data.generated.js"
                 benchmark_log "benchmark" "Dashboard data refreshed"
@@ -222,7 +244,7 @@ case "${COMMAND}" in
             fi
             engine_index=$((engine_index + 1))
             benchmark_log "benchmark" "Engine ${engine_index}/${#ENGINE_LIST[@]} ${engine}: start"
-            if ! run_engine_command "${engine}" "${SIZE}" "${DATA_DIR}" "${OUTPUT_PREFIX}" "${MACHINE_LABEL}" "${OS_LABEL}" "${RUN_DATE}" "${KEEP_RUNTIME}"; then
+            if ! run_engine_command "${engine}" "${SIZE}" "${DATA_DIR}" "${DATA_GLOB}" "${OUTPUT_PREFIX}" "${MACHINE_LABEL}" "${OS_LABEL}" "${RUN_DATE}" "${KEEP_RUNTIME}"; then
                 benchmark_log "benchmark" "Engine ${engine_index}/${#ENGINE_LIST[@]} ${engine}: failed"
                 failed+=("${engine}")
                 continue

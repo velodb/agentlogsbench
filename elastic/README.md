@@ -17,3 +17,9 @@ Typical run:
 bash ../download.sh --size 1m
 bash benchmark.sh --size 1m
 ```
+
+`DATA_DIR` or `DATA_GLOB` selects the source files and `RUNTIME_DIR` selects
+the disposable runtime. Set `ES_BIN` to an existing Elasticsearch executable;
+`ES_STORAGE_PATH`, `ES_CONF_DIR`, and `ES_LOG_PATH` override its runtime paths.
+If `ES_BIN` is not set or does not exist, the fallback installer uses its
+versioned directory below `elastic/.local/`.

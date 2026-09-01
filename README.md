@@ -6,7 +6,7 @@ This benchmark compares how analytical databases and search systems handle real 
 
 The dataset is a collection of files containing agent observation events delimited by newline (ndjson). Each event is one observation row in a trace — generations, tool calls, retries, failures, and replayable chains — with a stable set of promoted columns plus a dynamic `payload` for evolving telemetry. Public shards are hosted on a public S3 bucket and downloaded by `download.sh`.
 
-The benchmark currently runs against [ClickHouse](https://clickhouse.com/), [Apache Doris](https://doris.apache.org/), [Elasticsearch](https://www.elastic.co/elasticsearch), [OpenSearch](https://opensearch.org/), [PostgreSQL](https://www.postgresql.org/), and [DuckDB](https://duckdb.org/) on the same logical surface.
+The benchmark currently runs against [ClickHouse](https://clickhouse.com/), [Apache Doris](https://doris.apache.org/), [Elasticsearch](https://www.elastic.co/elasticsearch), [MatrixOne](https://github.com/matrixorigin/matrixone), [OpenSearch](https://opensearch.org/), [PostgreSQL](https://www.postgresql.org/), and [DuckDB](https://duckdb.org/) on the same logical surface.
 
 ## Principles
 
@@ -125,6 +125,7 @@ Each engine exposes the same logical surface using its native facilities:
 | Elasticsearch | typed properties | dynamic handling for `payload.attr.*` |
 | OpenSearch | typed properties | dynamic handling for `payload.attr.*` |
 | DuckDB | JSON column | full table scan baseline |
+| MatrixOne | JSON column | native primary key; JSON attribute scan baseline |
 
 ## Limitations
 
@@ -156,7 +157,7 @@ Running the full 100m benchmark takes several hours per engine; smaller tiers co
 
 ## Usage
 
-Each engine has its own folder (`clickhouse/`, `doris/`, `elastic/`, `opensearch/`, `postgres/`, `duckdb/`) with the install, import, and query scripts for that system. The shared driver is `benchmark.sh` at the top of `agentlogsbench/`.
+Each engine has its own folder (`clickhouse/`, `doris/`, `elastic/`, `matrixone/`, `opensearch/`, `postgres/`, `duckdb/`) with the install, import, and query scripts for that system. The shared driver is `benchmark.sh` at the top of `agentlogsbench/`.
 
 ### Download the data
 
@@ -183,6 +184,22 @@ Run one engine:
 bash benchmark.sh run-engine --engine clickhouse --size 1m
 ```
 
+The source data and disposable runtime can also be configured with environment
+variables. `DATA_DIR` points to a downloaded tier directory, `DATA_GLOB` points
+to one file or a file glob, and `RUNTIME_DIR` selects the runtime directory.
+The command-line `--data-dir` or `--data-glob` option overrides the matching
+environment variable.
+
+```bash
+DATA_DIR=/data/agentlogsbench/1m \
+RUNTIME_DIR=/data/agentlogsbench-runtime/clickhouse-1m \
+bash benchmark.sh run-engine --engine clickhouse --size 1m
+
+DATA_GLOB=/data/agentlogsbench/1m/agent_observations_0001.ndjson.gz \
+RUNTIME_DIR=/data/agentlogsbench-runtime/doris-1m \
+bash benchmark.sh run-engine --engine doris --size 1m
+```
+
 Add `--no-cleanup` to keep the engine runtime directory after the run for inspection.
 
 Run several engines on the same downloaded data:
@@ -192,6 +209,37 @@ bash benchmark.sh run-all --engines clickhouse,doris,elastic,opensearch --size 1
 ```
 
 `benchmark.sh` runs install, import, the 20-query suite, and storage statistics for each engine, following the per-engine script under that engine's folder.
+
+### Run MatrixOne for 1m
+
+The MatrixOne lane uses the same `common/downloads/agent_observations_0001.ndjson.gz`
+shard as the other engines. It does not download or build MatrixOne. Point the
+adapter at an existing MySQL-compatible MatrixOne endpoint:
+
+```bash
+export MO_HOST=127.0.0.1
+export MO_PORT=6001
+export MO_USER=root
+export MO_PASSWORD=''
+export MO_DB=agentlogsbench_mo
+export MO_TABLE=agent_observations
+
+bash benchmark.sh run-engine \
+  --engine matrixone \
+  --size 1m \
+  --data-dir common/downloads \
+  --keep-runtime
+```
+
+If the endpoint is not already running, also set `MO_HOME` to a MatrixOne
+installation containing `mo-service` and its default `etc/launch/launch.toml`
+(or set `MO_BIN` and `MO_CONFIG` explicitly). The adapter uses MatrixOne's
+server-side gzip reader by default and loads the compressed shard directly.
+When the target table already contains exactly the selected source row count,
+import is skipped; a non-empty partial table is rejected. For the current 1m
+shard that source count is 998,799. See
+[`matrixone/README.md`](matrixone/README.md) for the standalone workflow and
+fallback `MO_LOAD_MODE=local`.
 
 ### Validate
 
@@ -210,6 +258,8 @@ Each engine writes its own `results/` directory. The result artifacts follow a c
 - `results/<machine>_agentlog_<size>.json` — final result file. Embeds the metric sidecars and records them under `artifact_manifest`. This is what the dashboard reads.
 - `results/_query_results/_<machine>_agentlog_<size>.query_results` — text snapshot of each query's output, with long text and JSON-style payload bodies elided so cross-system diffs stay readable.
 - Per-engine sidecars (`.total_size`, `.data_size`, `.results_runtime`, `.results_memory_usage`, etc.) are collected during the run and embedded into the final JSON.
+
+Each engine's `results/` keeps only the final `*.json` plus `_query_results/`; temporary metric files are staged under the engine's runtime directory and folded into the final JSON.
 
 The example result files committed under each engine's `results/` directory show the expected layout (for example, [`clickhouse/results/`](clickhouse/results/) and [`doris/results/`](doris/results/)).
 
@@ -236,6 +286,7 @@ While the main benchmark uses a specific machine configuration for reproducibili
 - [x] [PostgreSQL](./postgres/README.md)
 - [x] [DuckDB](./duckdb/README.md)
 - [ ] MongoDB
+- [x] [MatrixOne](./matrixone/README.md)
 - [ ] VictoriaLogs
 - [ ] SingleStore
 - [ ] GreptimeDB
@@ -265,7 +316,7 @@ agentlogsbench/
     adapters/       # per-engine manifest + query-map
     seeds/          # seed envelopes for synthetic generation
     context/        # query context per dataset size
-  clickhouse/  doris/  elastic/  opensearch/  postgres/  duckdb/
+  clickhouse/  doris/  elastic/  matrixone/  opensearch/  postgres/  duckdb/
     benchmark.sh   create.sql/.json   install.sh   import.sh
     run_queries.sh   query_runner.py   results/   README.md
   tests/

@@ -16,3 +16,7 @@ Typical run:
 bash ../download.sh --size 1m
 bash benchmark.sh --size 1m
 ```
+
+`DATA_DIR` or `DATA_GLOB` selects the source files, `RUNTIME_DIR` selects the
+disposable runtime, `CH_BIN` selects an existing ClickHouse executable, and
+`CH_PATH` selects the ClickHouse data path.

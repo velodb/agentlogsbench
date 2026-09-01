@@ -33,7 +33,7 @@ ensure_python_pip() {
     DEBIAN_FRONTEND=noninteractive "${sudo_cmd[@]}" apt-get install -y python3-pip
 }
 
-if python3 -c 'import duckdb' >/dev/null 2>&1
+if python3 -c 'import duckdb; assert callable(getattr(duckdb, "connect", None))' >/dev/null 2>&1
 then
     echo "[duckdb] install done"
     exit 0

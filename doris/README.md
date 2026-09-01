@@ -16,3 +16,7 @@ Typical run:
 bash ../download.sh --size 1m
 bash benchmark.sh --size 1m
 ```
+
+`DATA_DIR` or `DATA_GLOB` selects the source files and `RUNTIME_DIR` selects the
+disposable FE/BE runtime. `DORIS_HOME` selects an existing Doris installation;
+the runtime's `fe-meta` and `be-storage` directories are created below it.
