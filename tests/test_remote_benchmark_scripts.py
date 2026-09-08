@@ -24,6 +24,19 @@ class DownloadAndRootBenchmarkScriptsTest(unittest.TestCase):
         self.assertIn('S3_BASE_URL="${S3_BASE_URL:-https://s3.us-east-1.amazonaws.com/bench-dataset/agentlogs}"', content)
         self.assertIn("Select the dataset size:", (root / "common" / "benchmark_lib.sh").read_text(encoding="utf-8"))
 
+    def test_proxy_download_script_preserves_and_normalizes_proxy_environment(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        content = (root / "download_proxy.sh").read_text(encoding="utf-8")
+
+        self.assertIn("http_proxy", content)
+        self.assertIn("https_proxy", content)
+        self.assertIn('export HTTPS_PROXY="${HTTP_PROXY_VALUE}"', content)
+        self.assertNotIn("--no-proxy", content)
+        self.assertNotIn(
+            "HTTPS_PROXY= HTTP_PROXY= https_proxy= http_proxy= ALL_PROXY= all_proxy=",
+            content,
+        )
+
     def test_root_benchmark_script_runs_size_based_engines_without_download_logic(self) -> None:
         root = Path(__file__).resolve().parents[1]
         content = (root / "benchmark.sh").read_text(encoding="utf-8")

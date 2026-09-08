@@ -168,6 +168,16 @@ bash download.sh --size 1m
 # or --size 10m, --size 100m
 ```
 
+If the direct S3 route is unavailable or slower, use `download_proxy.sh`. It
+honors `http_proxy`/`https_proxy` (including a lower-case `http_proxy` for the
+HTTPS dataset URL) and still supports the same resume and skip behavior:
+
+```bash
+http_proxy=http://127.0.0.1:7890 \
+https_proxy=http://127.0.0.1:7890 \
+bash download_proxy.sh --size 1m
+```
+
 If you want to inspect or re-use the same data across multiple engines, `download.sh` is idempotent: existing shards are not re-fetched unless `--force` is passed.
 
 ### Run the benchmark
